@@ -25,6 +25,7 @@ foreach($tests as $testname => $test)
   $name=$testname.$i;
   $params=$test['params'];
   $params['pmmserver']=$pmm_server_addr;
+  $params['pmmpassword']=$pmm_password;
   $r=provision_linode($name,$test['type'],$test['stackscript_id'],$params);
   $ip=$r[0]["ipv4"][0];
   echo("Starting $name  as $ip\n");
