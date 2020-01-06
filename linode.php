@@ -182,12 +182,14 @@ function deploy_pmm($pmm_image,$pmm_password,$pmm_server_type)
 /* Deploy "standard" MySQL test environment with 4 DB nodes and 3 App nodes */
 function deploy_mysql_test_environment($pmm_ip)
 {
+  global $pmm_password;
 
   $db_ips=array();
   for($i=1; $i<=4; $i++)
   {
     $params=array();
     $params["pmmserver"]=$pmm_ip;
+    $params["pmmpassword"]=$pmm_password;
     $dbs[$i]=provision_linode("mysql$i","g6-nanode-1",426435,$params);
   }
 
@@ -210,6 +212,7 @@ function deploy_mysql_test_environment($pmm_ip)
   $clients=array();
   $params=array();
   $params["pmmserver"]=$pmm_ip;
+  $params["pmmpassword"]=$pmm_password;
   for($j=1; $j<=4;$j++)
   {
     $params["db$j"]=$dbs_ips[$j];
