@@ -12,9 +12,9 @@ $types=array("g6-nanode-1"=>1);
 $mysqls=array("ps8"=>1,"ps57"=>1,"ps56"=>0);
 $benchmarks=array("tpcc"=>0,"stq"=>1);
 $tables=array("1"=>1);
-$tpccscales=array("1"=>1,"10"=>0,"1000000"=>1);
-$threads=array("1"=>1,"10"=>0,"10000"=>1);
-$rates=array("10"=>1);
+$tpccscales=array("1"=>1,"10"=>0,"1000000"=>1);  /* Distinct queries */
+$threads=array("1"=>1,"10"=>0,"10000"=>1);       /* Schemas */
+$rates=array("100"=>1);                          /* Target QPS */
 $querysources=array("slowlog"=>1,"perfschema"=>0);
   
 
@@ -48,6 +48,7 @@ foreach ($types as $tp=>$tp_cnt)
                 $params['tables']=$tbl;
                 $params['tpccscale']=$sc;
                 $params['threads']=$th;
+		$params['rate']=$rt;
                 $params['querysource']=$qs;
                 $r=provision_linode($name,$tp,572208,$params);
                 $ip=$r[0]["ipv4"][0];
