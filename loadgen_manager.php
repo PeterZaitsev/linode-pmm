@@ -9,13 +9,13 @@ require 'set_variables.php';
 /* Script will deploy all permutations so limit multiple settings to 1-2 options only */
 
 $types=array("g6-nanode-1"=>1);
-$mysqls=array("ps8"=>1,"ps57"=>1,"ps56"=>1);
-$benchmarks=array("tpcc"=>1);
+$mysqls=array("ps8"=>1,"ps57"=>1,"ps56"=>0);
+$benchmarks=array("tpcc"=>0,"stq"=>1);
 $tables=array("1"=>1);
-$tpccscales=array("10"=>1);
-$threads=array("10"=>1);
+$tpccscales=array("1"=>1,"10"=>0,"1000000"=>1);
+$threads=array("1"=>1,"10"=>0,"10000"=>1);
 $rates=array("10"=>1);
-$querysources=array("slowlog"=>0,"perfschema"=>1);
+$querysources=array("slowlog"=>1,"perfschema"=>0);
   
 
 $id=1;
