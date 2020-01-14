@@ -5,8 +5,9 @@
 require 'linode.php';
 require 'set_variables.php';
 
-$pmm_image="percona/pmm-server:2";   /*PMM Server Image to Deploy */
-$pmm_server_type="g6-standard-2";
+$pmm_image="perconalab/pmm-server:dev-latest";   /*PMM Server - Latest Dev  */
+#$pmm_image="percona/pmm-server:2";   /*PMM Server - Latest GA */
+$pmm_server_type="g6-standard-4";
 #$pmm_server_type="g6-nanode-1";
 
 

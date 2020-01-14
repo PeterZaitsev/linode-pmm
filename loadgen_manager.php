@@ -8,12 +8,13 @@ require 'set_variables.php';
 
 /* Script will deploy all permutations so limit multiple settings to 1-2 options only */
 
-$types=array("g6-nanode-1"=>1);
+$types=array("g6-standard-2"=>1);
+#$types=array("g6-nanode-1"=>1);
 $mysqls=array("ps8"=>1,"ps57"=>1,"ps56"=>0);
 $benchmarks=array("tpcc"=>0,"stq"=>1);
 $tables=array("1"=>1);
-$tpccscales=array("1"=>1,"10"=>0,"1000000"=>1);  /* Distinct queries */
-$threads=array("1"=>1,"10"=>0,"10000"=>1);       /* Schemas */
+$tpccscales=array("1"=>1,"10"=>0,"1000000"=>0);  /* Distinct queries */
+$threads=array("1"=>0,"10"=>0,"10000"=>1);       /* Schemas */
 $rates=array("100"=>1);                          /* Target QPS */
 $querysources=array("slowlog"=>1,"perfschema"=>0);
   
