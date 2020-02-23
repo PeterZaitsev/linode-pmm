@@ -3,7 +3,7 @@
 /* We do not want to keep password information in repository so we initialize them from environment variables */
 
 /* Use Prefix for Instance Naming to allow multiple deployments */
-$prefix=getenv("PMM_PREFIX") or die("Set PMM_PREFIX Environment Variable");
+$prefix=getenv("PMM_PREFIX") or die("Set PMM_PREFIX Environment Variable\n");
 
 echo("Using Prefix $prefix for deployment\n");
 
