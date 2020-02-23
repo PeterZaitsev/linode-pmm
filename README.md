@@ -18,6 +18,13 @@ _PMM_PREFIX_ - Prefix to use for deployment
 _PMM_ADMIN_PASSWORD_ - Server to set for PMM Server while provisioning it and to use while provisioning workload clients 
 _PMM_SERVER_ -  The IP/Host Name of the PMM Server.  Required by Scripts provisioning workloads for existing PMM Server Only 
 
+Additionally you can Optionally Set 
+
+__PMM_IMAGE__  -  Image of PMM Server to deploy
+__PMM_SERVER_TYPE__  - The Type of the Instance (Linode) to use for PMM Server Deployment
+
+If these variables are not set defaults will be used.
+
 ## Scripts 
 
 _clean_prefix.php_  - Deletes all linodes except PMM server matching given prefix.  Very helpful when deploying many test workload nodes.
