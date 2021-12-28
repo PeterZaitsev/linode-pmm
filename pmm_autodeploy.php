@@ -8,8 +8,6 @@
 require 'linode.php';
 require 'set_variables.php';
 
-$prefix="at";   /* We can override prefix from environment variable if wanted */
-
 $pmm_server_name="PMM2Server";
 $pmm_server_type="g6-standard-2";
 
@@ -21,10 +19,11 @@ while (true)
   clean_prefix($prefix,true);
   # Get the latest PMM tag 
 #  $t=get_pmm_latest_tag();
-  $t="dev-latest";  /* Use this tag instead */
   # Deploy PMM Server with this Tag
-  $tag="perconalab/pmm-server:$t";
-  echo("Deploying PMM Server with Tag $t Instance Type: $pmm_server_type\n");
+#  $tag="perconalab/pmm-server:$t";
+  $tag="percona/pmm-server:2";
+#  $tag="perconalab/pmm-server-fb:PR-863-f8d2456";
+  echo("Deploying PMM Server  $tag Instance Type: $pmm_server_type\n");
   $pmm_ip=deploy_pmm($tag,$pmm_password,$pmm_server_type);
   if(!$pmm_ip)
     die("Failed to deploy PMM Server\n"); 

@@ -84,7 +84,8 @@ do {
   curl_setopt($ch, CURLOPT_TIMEOUT, 10);
   $res=curl_exec($ch);
   curl_close($ch);
-  if ($res=="{}") {
+  $r=json_decode($res,TRUE);
+  if (!is_null($r)) {
     return TRUE;
     }
   /* Avoid too often attempts if connection is refused promptly */
@@ -172,7 +173,7 @@ function deploy_pmm($pmm_image,$pmm_password,$pmm_server_type)
     return false;
   $r=wait_pmm_linode($pmm,1800);
   if (!$r)
-    return $false;
+    return false;
   $pmm_ip=$pmm[0]["ipv4"][0];
   echo("Deployed PMM Server: $pmm_ip\n");
   return $pmm_ip;
@@ -223,6 +224,96 @@ function deploy_mysql_test_environment($pmm_ip)
   for($i=1; $i<=3; $i++)
   {
     $clients[$i]=provision_linode("client$i","g6-nanode-1",427130,$params);
+  }
+
+  /* Wait for them to become available */
+  for($i=1; $i<=3; $i++)
+  {
+    $r=wait_linode($clients[$i],22,1800);
+    if(!$r)
+      die("Failed to deploy Client Node  client$i\n");
+    $ip=$clients[$i][0]["ipv4"][0];
+    echo("Provisioned Client Instance $i on $ip\n");
+  } 
+  return true;
+
+}
+
+
+/* Deploy "standard" Mixed test environment with MySQL and PostgreSQL Nodes */
+function deploy_mixed_test_environment($pmm_ip)
+{
+  global $pmm_password;
+
+  $mysql_ips=array();
+  for($i=1; $i<=4; $i++)
+  {
+    $params=array();
+    $params["pmmserver"]=$pmm_ip;
+    $params["pmmpassword"]=$pmm_password;
+    $mysqls[$i]=provision_linode("mysql$i","g6-nanode-1",426435,$params);
+  }
+
+  $pg_ips=array();
+  for($i=1; $i<=4; $i++)
+  {
+    $params=array();
+    $params["pmmserver"]=$pmm_ip;
+    $params["pmmpassword"]=$pmm_password;
+    $params["pgver"]="14";
+    $params["extn"]="pg_stat_monitor";
+    $pgs[$i]=provision_linode("pg$i","g6-nanode-1",949673,$params);
+  }
+
+
+
+  /* Wait for all MySQL  Nodes to become available */
+  for($i=1; $i<=4; $i++)
+  {
+    $r=wait_linode($mysqls[$i],3306,1800);
+    if(!$r)
+      die("Failed to deploy DB Node mysql$i\n");
+    $ip=$mysqls[$i][0]["ipv4"][0];
+    $mysql_ips[$i]=$ip;
+    echo("Provisioned MySQL DB Instance $i on $ip\n");
+  }
+
+  /* Wait for all PostgreSQL  Nodes to become available */
+  for($i=1; $i<=4; $i++)
+  {
+    $r=wait_linode($pgs[$i],5432,1800);   /* 5432 - PostgreSQL TCP Port */
+    if(!$r)
+      die("Failed to deploy DB Node mysql$i\n");
+    $ip=$pgs[$i][0]["ipv4"][0];
+    $pg_ips[$i]=$ip;
+    echo("Provisioned PostgreSQL DB Instance $i on $ip\n");
+  }
+
+
+
+  $sleep=900;
+  echo("Sleeping $sleep seconds for database preparation to be completed\n");
+  sleep($sleep);
+
+  /* Deploy Client Nodes */
+  $clients=array();
+  $params=array();
+  $params["pmmserver"]=$pmm_ip;
+  $params["pmmpassword"]=$pmm_password;
+  for($j=1; $j<=4;$j++)
+  {
+    $params["mysql$j"]=$mysql_ips[$j];
+  }
+  for($j=1; $j<=4;$j++)
+  {
+    $params["pg$j"]=$pg_ips[$j];
+  }
+
+
+  /* Provision Clients */ 
+  for($i=1; $i<=3; $i++)
+  {
+    $clients[$i]=provision_linode("client$i","g6-nanode-1",950149,$params);
   }
 
   /* Wait for them to become available */
